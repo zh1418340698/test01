@@ -5,9 +5,9 @@
 <configuration>
 
     <typeAliases>
-        <package name="com.zenghao.crm.domain"/>
+        <package name="com.zenghao.crm.settings.domain"/>
     </typeAliases>
     <mappers>
-        <package name="com.zenghao.crm.dao"/>
+        <package name="com.zenghao.crm.settings.dao"/>
     </mappers>
 </configuration>
