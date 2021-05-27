@@ -28,14 +28,14 @@
     <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
   </listener>
 
-  <mime-mapping>
+ <!-- <mime-mapping>
     <extension>htm</extension>
     <mime-type>text/html;charset=utf-8</mime-type>
   </mime-mapping>
   <mime-mapping>
     <extension>html</extension>
     <mime-type>text/html;charset=utf-8</mime-type>
-  </mime-mapping>
+  </mime-mapping>-->
 
 
 
