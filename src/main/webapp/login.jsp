@@ -52,7 +52,7 @@ request.getServerPort()+request.getContextPath()+"/";
 
 			//去后台验证登录相关操作
 			$.ajax({
-				url:"user/login.do",
+				url:"login.do",
 				data:{
 					"loginAct" : loginAct,
 					"loginPwd" : loginPwd
@@ -70,7 +70,7 @@ request.getServerPort()+request.getContextPath()+"/";
 					if ( data.success){
 
 						//跳转到工作台的初始页
-						window.location.href="workbench/index.html";
+						window.location.href="workbench/index.jsp";
 
 						//如果登录失败
 					}else {
@@ -97,8 +97,8 @@ request.getServerPort()+request.getContextPath()+"/";
 			<div class="page-header">
 				<h1>登录</h1>
 			</div>
-			<!--workbench/index.html-->
-			<form action="workbench/index.html" class="form-horizontal" role="form" method="get">
+			<!--workbench/index.jsp-->
+			<form action="workbench/index.jsp" class="form-horizontal" role="form" method="get">
 				<div class="form-group form-group-lg">
 					<div style="width: 350px;">
 						<input class="form-control" type="text" placeholder="用户名" id="loginAct" >
