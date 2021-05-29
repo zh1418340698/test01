@@ -8,11 +8,18 @@ import com.zenghao.crm.utils.DateTimeUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class UserServiceImpl implements UserService {
 
     @Autowired
     private UserDao userDao;
+
+    public void setUserDao(UserDao userDao) {
+        this.userDao = userDao;
+    }
+
     @Override
     public User login(String loginAct, String loginPwd,String ip) throws LoginException {
 
@@ -44,5 +51,10 @@ public class UserServiceImpl implements UserService {
             throw new LoginException("ip地址受限，请联系管理员");
         }
         return user;
+    }
+
+    @Override
+    public List<User> getUserList() {
+        return userDao.getUserList();
     }
 }

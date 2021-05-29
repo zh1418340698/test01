@@ -6,8 +6,10 @@
 
     <typeAliases>
         <package name="com.zenghao.crm.settings.domain"/>
+        <package name="com.zenghao.crm.workbench.domain"/>
     </typeAliases>
     <mappers>
         <package name="com.zenghao.crm.settings.dao"/>
+        <package name="com.zenghao.crm.workbench.dao"/>
     </mappers>
 </configuration>

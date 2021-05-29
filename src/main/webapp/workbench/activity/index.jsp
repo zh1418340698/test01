@@ -20,7 +20,35 @@ request.getServerPort()+request.getContextPath()+"/";
 <script type="text/javascript">
 
 	$(function(){
-		
+
+		$("#addBtn").click(function () {
+
+			//走后台，为下拉列表获取用户的名字
+			$.ajax({
+				url:"workbench/activity/save.do",
+				dataType:"json",
+				success:function (data) {
+					var html = "<option></option>";
+
+					$.each(data,function (i,obj) {
+
+						html += "<option value='"+obj.id+"'>"+obj.name+"</option>"
+
+					})
+					//在字符串拼接完毕后，在外面用html函数把拼好的字符串当做子标签添加进来
+					$("#create-marketActivityOwner").html(html);
+
+					//获取登录用户的id，注意：在js代码中，EL表达式要写在双引号中
+					var id = "${user.id}";
+					//让value=id的标签为默认选中项
+					$("#create-marketActivityOwner").val(id);
+				}
+			})
+
+
+			$("#createActivityModal").modal("show");
+
+		})
 		
 		
 	});
@@ -47,9 +75,10 @@ request.getServerPort()+request.getContextPath()+"/";
 							<label for="create-marketActivityOwner" class="col-sm-2 control-label">所有者<span style="font-size: 15px; color: red;">*</span></label>
 							<div class="col-sm-10" style="width: 300px;">
 								<select class="form-control" id="create-marketActivityOwner">
-								  <option>zhangsan</option>
-								  <option>lisi</option>
-								  <option>wangwu</option>
+								  /*
+										这里在js代码中实现获取User的name
+									*/
+									
 								</select>
 							</div>
                             <label for="create-marketActivityName" class="col-sm-2 control-label">名称<span style="font-size: 15px; color: red;">*</span></label>
@@ -208,7 +237,14 @@ request.getServerPort()+request.getContextPath()+"/";
 			</div>
 			<div class="btn-toolbar" role="toolbar" style="background-color: #F7F7F7; height: 50px; position: relative;top: 5px;">
 				<div class="btn-group" style="position: relative; top: 18%;">
-				  <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#createActivityModal"><span class="glyphicon glyphicon-plus"></span> 创建</button>
+					<!--
+						以后不这样写，因为不能对按钮功能实现扩充，
+						<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#createActivityModal"><span class="glyphicon glyphicon-plus"></span> 创建</button>
+				  		<button type="button" class="btn btn-default" data-toggle="modal" data-target="#editActivityModal"><span class="glyphicon glyphicon-pencil"></span> 修改</button>
+						所以未来的实际开发中，不要写死在元素中，
+						应该由我们在js代码中来操作
+					-->
+				  <button type="button" class="btn btn-primary" id="addBtn"><span class="glyphicon glyphicon-plus"></span> 创建</button>
 				  <button type="button" class="btn btn-default" data-toggle="modal" data-target="#editActivityModal"><span class="glyphicon glyphicon-pencil"></span> 修改</button>
 				  <button type="button" class="btn btn-danger"><span class="glyphicon glyphicon-minus"></span> 删除</button>
 				</div>
