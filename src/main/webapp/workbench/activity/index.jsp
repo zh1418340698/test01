@@ -23,9 +23,18 @@ request.getServerPort()+request.getContextPath()+"/";
 
 		$("#addBtn").click(function () {
 
+			$(".time").datetimepicker({
+				minView: "month",
+				language: "zh-CN",
+				format: "yyyy-mm-dd",
+				autoclose: true,
+				todayBtn: true,
+				pickerPosition: "bottom-left"
+			});
+
 			//走后台，为下拉列表获取用户的名字
 			$.ajax({
-				url:"workbench/activity/save.do",
+				url:"workbench/activity/add.do",
 				dataType:"json",
 				success:function (data) {
 					var html = "<option></option>";
@@ -49,6 +58,37 @@ request.getServerPort()+request.getContextPath()+"/";
 			$("#createActivityModal").modal("show");
 
 		})
+
+		//为保存按钮绑定事件，执行添加操作
+		$("#saveBtn").click(function () {
+			$.ajax({
+				url:"workbench/activity/save.do",
+				data:{
+					"owner":$.trim($("#create-marketActivityOwner").val()),
+					"name":$.trim($("#create-marketActivityName").val()),
+					"startDate":$.trim($("#create-startTime").val()),
+					"endDate":$.trim($("#create-endTime").val()),
+					"cost":$.trim($("#create-cost").val()),
+					"description":$.trim($("#create-describe").val())
+				},
+				type:"post",
+				dataType: "json",
+				success:function (data) {
+
+					if( data.success){
+
+						//对于表单的jquery对象没有提供reset方法，所以要转换成dom对象，原生js提供了reset方法
+						$("#activityAddForm")[0].reset();
+						//关闭模态窗口
+						$("#createActivityModal").modal("hide");
+
+					}else {
+						alert("创建失败");
+					}
+
+				}
+			})
+		})
 		
 		
 	});
@@ -68,17 +108,18 @@ request.getServerPort()+request.getContextPath()+"/";
 					<h4 class="modal-title" id="myModalLabel1">创建市场活动</h4>
 				</div>
 				<div class="modal-body">
-				
-					<form class="form-horizontal" role="form">
+
+					<!--给表单赋值id属性，用来重置表单-->
+					<form id="activityAddForm" class="form-horizontal" role="form">
 					
 						<div class="form-group">
 							<label for="create-marketActivityOwner" class="col-sm-2 control-label">所有者<span style="font-size: 15px; color: red;">*</span></label>
 							<div class="col-sm-10" style="width: 300px;">
 								<select class="form-control" id="create-marketActivityOwner">
-								  /*
-										这里在js代码中实现获取User的name
-									*/
-									
+								  <!--
+									  这里在js代码中实现获取User的name
+								  -->
+
 								</select>
 							</div>
                             <label for="create-marketActivityName" class="col-sm-2 control-label">名称<span style="font-size: 15px; color: red;">*</span></label>
@@ -90,11 +131,11 @@ request.getServerPort()+request.getContextPath()+"/";
 						<div class="form-group">
 							<label for="create-startTime" class="col-sm-2 control-label">开始日期</label>
 							<div class="col-sm-10" style="width: 300px;">
-								<input type="text" class="form-control" id="create-startTime">
+								<input type="text" class="form-control time" id="create-startTime" readonly>
 							</div>
 							<label for="create-endTime" class="col-sm-2 control-label">结束日期</label>
 							<div class="col-sm-10" style="width: 300px;">
-								<input type="text" class="form-control" id="create-endTime">
+								<input type="text" class="form-control time" id="create-endTime" readonly>
 							</div>
 						</div>
                         <div class="form-group">
@@ -115,8 +156,9 @@ request.getServerPort()+request.getContextPath()+"/";
 					
 				</div>
 				<div class="modal-footer">
+					<!--data-dismiss="modal"表示关闭模态窗口-->
 					<button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-					<button type="button" class="btn btn-primary" data-dismiss="modal">保存</button>
+					<button type="button" class="btn btn-primary" id="saveBtn">保存</button>
 				</div>
 			</div>
 		</div>
