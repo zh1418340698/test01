@@ -89,9 +89,17 @@ request.getServerPort()+request.getContextPath()+"/";
 				}
 			})
 		})
-		
+
+		//页面加载完毕后触发的一个方法
+		pageList(1,2);
 		
 	});
+
+	function pageList(pageNo,pageSize) {
+
+		alert("展现市场活动列表");
+	}
+
 	
 </script>
 </head>
