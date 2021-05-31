@@ -14,6 +14,11 @@ request.getServerPort()+request.getContextPath()+"/";
 	<script>
 		$(function () {
 
+			//如果当前页面不是顶级窗口，则设置当前窗口为顶级窗口
+			if ( window.top!=window){
+				window.top.location=window.location;
+			}
+
 			//页面加载完毕后，将用户文本框中的内容清空
 			$("#loginAct").val("");
 

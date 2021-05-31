@@ -11,15 +11,14 @@ request.getServerPort()+request.getContextPath()+"/";
 <link href="jquery/bootstrap_3.3.0/css/bootstrap.min.css" type="text/css" rel="stylesheet" />
 <script type="text/javascript" src="jquery/jquery-1.11.1-min.js"></script>
 <script type="text/javascript" src="jquery/bootstrap_3.3.0/js/bootstrap.min.js"></script>
+
+
 <script type="text/javascript">
 
 	//页面加载完毕
 	$(function(){
 
-		if ( window.top!=window){
-			window.top.location=window.location;
-		}
-		
+
 		//导航中所有文本颜色为黑色
 		$(".liClass > a").css("color" , "black");
 		
