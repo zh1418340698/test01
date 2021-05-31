@@ -90,6 +90,9 @@ request.getServerPort()+request.getContextPath()+"/";
 
 					if( data.success){
 
+						//做完添加操作后，应该回到第一页，维持每页展现的记录数
+						pageList(1,$("#activityPage").bs_pagination('getOption', 'rowsPerPage'));
+
 						//对于表单的jquery对象没有提供reset方法，所以要转换成dom对象，原生js提供了reset方法
 						$("#activityAddForm")[0].reset();
 						//关闭模态窗口
@@ -118,7 +121,8 @@ request.getServerPort()+request.getContextPath()+"/";
             $("#hidden-startDate").val($.trim($("#search-startTime").val()));
             $("#hidden-endDate").val($.trim($("#search-endTime").val()));
 
-			pageList(1,2);
+			pageList(1,$("#activityPage").bs_pagination('getOption', 'rowsPerPage'));
+
 		})
 
 		//为全选的复选框绑定事件，触发全选操作
@@ -171,7 +175,10 @@ request.getServerPort()+request.getContextPath()+"/";
 
 							if( data.success){
 
-								pageList(1,2);
+								//pageList(1,2);
+								//删除操作之后，回到第一页，维持每页展现的记录数
+								pageList(1,$("#activityPage").bs_pagination('getOption', 'rowsPerPage'));
+
 
 							}else {
 
@@ -235,7 +242,8 @@ request.getServerPort()+request.getContextPath()+"/";
 
 			}
 		})
-		
+
+		//为更新按钮绑定事件，更新市场活动信息
 		$("#updateBtn").click(function () {
 
 			$.ajax({
@@ -254,7 +262,22 @@ request.getServerPort()+request.getContextPath()+"/";
 
 					if (data.success){
 
-						pageList(1,2);
+						//pageList(1,2);
+						/*
+							$("#activityPage").bs_pagination('getOption', 'currentPage'):
+								表示操作后停留在当前页
+							$("#activityPage").bs_pagination('getOption', 'rowsPerPage'):
+								表示操作后维持已经设置好的每页展现的记录数
+
+							这两个参数不需要我们进行任何的修改操作
+							 直接使用即可
+
+							 修改成功后，保持在当前页面，维持维持每页的记录数
+						*/
+						pageList($("#activityPage").bs_pagination('getOption', 'currentPage')
+								,$("#activityPage").bs_pagination('getOption', 'rowsPerPage'));
+
+
 						$("#editActivityModal").modal("hide");
 					}else {
 						alert("修改市场活动失败");
