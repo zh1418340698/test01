@@ -4,6 +4,7 @@ import com.zenghao.crm.vo.PaginationVo;
 import com.zenghao.crm.workbench.dao.ActivityDao;
 import com.zenghao.crm.workbench.dao.ActivityRemarkDao;
 import com.zenghao.crm.workbench.domain.Activity;
+import com.zenghao.crm.workbench.domain.ActivityRemark;
 import com.zenghao.crm.workbench.service.ActivityService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,9 +22,6 @@ public class ActivityServiceImpl implements ActivityService {
     @Autowired
     private ActivityRemarkDao activityRemarkDao;
 
-    public void setActivityDao(ActivityDao activityDao) {
-        this.activityDao = activityDao;
-    }
 
     @Override
     public boolean save(Activity activity) {
@@ -87,6 +85,60 @@ public class ActivityServiceImpl implements ActivityService {
         Boolean flag = true;
 
         int count = activityDao.update(activity);
+        if ( count != 1){
+            flag = false;
+        }
+
+        return flag;
+    }
+
+    @Override
+    public Activity detail(String id) {
+
+        Activity a = activityDao.detail(id);
+
+        return a;
+    }
+
+    @Override
+    public List<ActivityRemark> getRemarkListByAid(String activityId) {
+        List<ActivityRemark> list = activityRemarkDao.getRemarkListByAid(activityId);
+        return list;
+    }
+
+    @Override
+    public Boolean deleteRemark(String id) {
+        Boolean flag = true;
+
+        int count = activityRemarkDao.deleteRemark(id);
+        if ( count != 1){
+            flag = false;
+        }
+        return flag;
+    }
+
+    @Override
+    public Boolean saveRemark(ActivityRemark ar) {
+        Boolean flag = true;
+
+        int count = activityRemarkDao.saveRemark(ar);
+        if ( count != 1 ){
+            flag = false;
+        }
+        return flag;
+    }
+
+    @Override
+    public ActivityRemark getRemarkById(String id) {
+        ActivityRemark ar = activityRemarkDao.getRemarkById(id);
+        return ar;
+    }
+
+    @Override
+    public Boolean updateRemark(ActivityRemark ar) {
+        Boolean flag = true;
+
+        int count = activityRemarkDao.updateRemark(ar);
         if ( count != 1){
             flag = false;
         }

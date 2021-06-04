@@ -30,6 +30,11 @@
     <url-pattern>*.jsp</url-pattern>
   </filter-mapping>
 
+  <!--注册监听器-->
+  <listener>
+    <listener-class>com.zenghao.crm.web.listener.SysInitListener</listener-class>
+  </listener>
+
   <context-param>
     <param-name>contextConfigLocation</param-name>
     <param-value>classpath:applicationContext.xml</param-value>

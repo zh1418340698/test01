@@ -3,7 +3,9 @@ package com.zenghao.crm.workbench.service;
 
 import com.zenghao.crm.vo.PaginationVo;
 import com.zenghao.crm.workbench.domain.Activity;
+import com.zenghao.crm.workbench.domain.ActivityRemark;
 
+import java.util.List;
 import java.util.Map;
 
 public interface ActivityService {
@@ -17,4 +19,16 @@ public interface ActivityService {
     Activity edit(String id);
 
     Boolean updateActivity(Activity activity);
+
+    Activity detail(String id);
+
+    List<ActivityRemark> getRemarkListByAid(String activityId);
+
+    Boolean deleteRemark(String id);
+
+    Boolean saveRemark(ActivityRemark ar);
+
+    ActivityRemark getRemarkById(String id);
+
+    Boolean updateRemark(ActivityRemark ar);
 }
