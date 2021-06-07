@@ -1,7 +1,7 @@
 package com.zenghao.crm.workbench.domain;
 
 public class Contacts {
-	
+	//联系人
 	private String id;
 	private String owner;
 	private String source;
@@ -129,8 +129,6 @@ public class Contacts {
 	public void setAddress(String address) {
 		this.address = address;
 	}
-	
-	
 
-	
+
 }

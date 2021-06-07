@@ -1,7 +1,7 @@
 package com.zenghao.crm.workbench.domain;
 
 public class Customer {
-	
+	//客户
 	private String id;
 	private String owner;
 	private String name;
