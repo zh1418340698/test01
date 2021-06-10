@@ -5,6 +5,14 @@
 
 <mapper namespace="com.zenghao.crm.workbench.dao.TranHistoryDao">
 
+    <!--根据交易id获取交易历史记录-->
+    <select id="getHistoryListByTranId" resultType="TranHistory">
+        select * from tbl_tran_history
+        where tranId=#{tranId}
+        order by stage desc
+
+    </select>
+
     <insert id="save">
         insert into tbl_tran_history(
         id,

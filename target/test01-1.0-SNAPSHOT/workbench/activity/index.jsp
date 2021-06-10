@@ -17,6 +17,7 @@ request.getServerPort()+request.getContextPath()+"/";
 <script type="text/javascript" src="jquery/bootstrap-datetimepicker-master/js/bootstrap-datetimepicker.js"></script>
 <script type="text/javascript" src="jquery/bootstrap-datetimepicker-master/locale/bootstrap-datetimepicker.zh-CN.js"></script>
 
+	<%--分页插件--%>
 	<link rel="stylesheet" type="text/css" href="jquery/bs_pagination/jquery.bs_pagination.min.css">
 	<script type="text/javascript" src="jquery/bs_pagination/jquery.bs_pagination.min.js"></script>
 	<script type="text/javascript" src="jquery/bs_pagination/en.js"></script>
@@ -35,15 +36,6 @@ request.getServerPort()+request.getContextPath()+"/";
 
 		//为创建按钮绑定事件，打开创建市场活动界面
 		$("#addBtn").click(function () {
-
-			/*$(".time").datetimepicker({
-				minView: "month",
-				language: "zh-CN",
-				format: "yyyy-mm-dd",
-				autoclose: true,
-				todayBtn: true,
-				pickerPosition: "bottom-left"
-			});*/
 
 			//走后台，为下拉列表获取用户的名字
 			$.ajax({

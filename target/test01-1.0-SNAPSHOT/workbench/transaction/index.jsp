@@ -17,13 +17,85 @@ request.getServerPort()+request.getContextPath()+"/";
 <script type="text/javascript" src="jquery/bootstrap-datetimepicker-master/js/bootstrap-datetimepicker.js"></script>
 <script type="text/javascript" src="jquery/bootstrap-datetimepicker-master/locale/bootstrap-datetimepicker.zh-CN.js"></script>
 
-<script type="text/javascript">
+	<%--分页插件--%>
+	<link rel="stylesheet" type="text/css" href="jquery/bs_pagination/jquery.bs_pagination.min.css">
+	<script type="text/javascript" src="jquery/bs_pagination/jquery.bs_pagination.min.js"></script>
+	<script type="text/javascript" src="jquery/bs_pagination/en.js"></script>
+
+	<script type="text/javascript">
 
 	$(function(){
-		
-		
+
+		//给全选框绑定事件，触发全选
+		$("#qx").click(function () {
+			$("input[name=xz]").prop("checked",this.checked);
+		})
+		//给复选框绑定事件，与全选框对应
+		$("#showTranBody").on("click",$("input[name=xz]"),function () {
+			$("#qx").prop("checked",$("input[name=xz]").length==$("input[name=xz]:checked").length);
+		})
+
+		//页面加载后，默认每页展示5条记录
+		pageList(1,5);
 		
 	});
+
+	function pageList(pageNo,pageSize) {
+
+		$.ajax({
+			url:"workbench/transaction/pageList.do",
+			data:{
+				"pageNo":pageNo,
+				"pageSize":pageSize
+			},
+			dataType:"json",
+			type:"get",
+			success:function (data) {
+
+				var html = "";
+
+				$.each(data.tranList,function (i,n) {
+
+					html += '<tr>';
+					html += '<td><input name="xz" value="'+n.id+'" type="checkbox" /></td>';
+					html += '<td><a style="text-decoration: none; cursor: pointer;" onclick="window.location.href=\'workbench/transaction/detail.do?id='+n.id+'\';">'+n.name+'</a></td>';
+					html += '<td>'+n.customerId+'</td>';
+					html += '<td>'+n.stage+'</td>';
+					html += '<td>'+n.type+'</td>';
+					html += '<td>'+n.owner+'</td>';
+					html += '<td>'+n.source+'</td>';
+					html += '<td>'+n.contactsId+'</td>';
+					html += '</tr>';
+				})
+
+				$("#showTranBody").html(html);
+
+				var totalPages = data.total%pageSize==0?data.total/pageSize:parseInt(data.total/pageSize)+1;
+
+				//数据处理完毕后，结合分页查询，对前端展现分页信息
+				$("#tranPage").bs_pagination({
+					currentPage: pageNo, // 页码
+					rowsPerPage: pageSize, // 每页显示的记录条数
+					maxRowsPerPage: 20, // 每页最多显示的记录条数
+					totalPages: totalPages, // 总页数
+					totalRows: data.total, // 总记录条数
+
+					visiblePageLinks: 3, // 显示几个卡片
+
+					showGoToPage: true,
+					showRowsPerPage: true,
+					showRowsInfo: true,
+					showRowsDefaultInfo: true,
+
+					//在点击分页组件时触发该函数
+					onChangePage : function(event, data){
+						pageList(data.currentPage , data.rowsPerPage);
+					}
+				});
+
+			}
+		})
+	}
 	
 </script>
 </head>
@@ -134,7 +206,7 @@ request.getServerPort()+request.getContextPath()+"/";
 			</div>
 			<div class="btn-toolbar" role="toolbar" style="background-color: #F7F7F7; height: 50px; position: relative;top: 10px;">
 				<div class="btn-group" style="position: relative; top: 18%;">
-				  <button type="button" class="btn btn-primary" onclick="window.location.href='workbench/transaction/save.jsp';"><span class="glyphicon glyphicon-plus"></span> 创建</button>
+				  <button type="button" class="btn btn-primary" onclick="window.location.href='workbench/transaction/add.do';"><span class="glyphicon glyphicon-plus"></span> 创建</button>
 				  <button type="button" class="btn btn-default" onclick="window.location.href='workbench/transaction/edit.html';"><span class="glyphicon glyphicon-pencil"></span> 修改</button>
 				  <button type="button" class="btn btn-danger"><span class="glyphicon glyphicon-minus"></span> 删除</button>
 				</div>
@@ -145,7 +217,7 @@ request.getServerPort()+request.getContextPath()+"/";
 				<table class="table table-hover">
 					<thead>
 						<tr style="color: #B3B3B3;">
-							<td><input type="checkbox" /></td>
+							<td><input id="qx" type="checkbox" /></td>
 							<td>名称</td>
 							<td>客户名称</td>
 							<td>阶段</td>
@@ -155,8 +227,8 @@ request.getServerPort()+request.getContextPath()+"/";
 							<td>联系人名称</td>
 						</tr>
 					</thead>
-					<tbody>
-						<tr>
+					<tbody id="showTranBody">
+						<%--<tr>
 							<td><input type="checkbox" /></td>
 							<td><a style="text-decoration: none; cursor: pointer;" onclick="window.location.href='workbench/transaction/detail.jsp';">动力节点-交易01</a></td>
 							<td>动力节点</td>
@@ -165,8 +237,8 @@ request.getServerPort()+request.getContextPath()+"/";
 							<td>zhangsan</td>
 							<td>广告</td>
 							<td>李四</td>
-						</tr>
-                        <tr class="active">
+						</tr>--%>
+                        <%--<tr class="active">
                             <td><input type="checkbox" /></td>
                             <td><a style="text-decoration: none; cursor: pointer;" onclick="window.location.href='workbench/transaction/detail.jsp';">动力节点-交易01</a></td>
                             <td>动力节点</td>
@@ -175,44 +247,13 @@ request.getServerPort()+request.getContextPath()+"/";
                             <td>zhangsan</td>
                             <td>广告</td>
                             <td>李四</td>
-                        </tr>
+                        </tr>--%>
 					</tbody>
 				</table>
 			</div>
 			
 			<div style="height: 50px; position: relative;top: 20px;">
-				<div>
-					<button type="button" class="btn btn-default" style="cursor: default;">共<b>50</b>条记录</button>
-				</div>
-				<div class="btn-group" style="position: relative;top: -34px; left: 110px;">
-					<button type="button" class="btn btn-default" style="cursor: default;">显示</button>
-					<div class="btn-group">
-						<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-							10
-							<span class="caret"></span>
-						</button>
-						<ul class="dropdown-menu" role="menu">
-							<li><a href="#">20</a></li>
-							<li><a href="#">30</a></li>
-						</ul>
-					</div>
-					<button type="button" class="btn btn-default" style="cursor: default;">条/页</button>
-				</div>
-				<div style="position: relative;top: -88px; left: 285px;">
-					<nav>
-						<ul class="pagination">
-							<li class="disabled"><a href="#">首页</a></li>
-							<li class="disabled"><a href="#">上一页</a></li>
-							<li class="active"><a href="#">1</a></li>
-							<li><a href="#">2</a></li>
-							<li><a href="#">3</a></li>
-							<li><a href="#">4</a></li>
-							<li><a href="#">5</a></li>
-							<li><a href="#">下一页</a></li>
-							<li class="disabled"><a href="#">末页</a></li>
-						</ul>
-					</nav>
-				</div>
+				<div id="tranPage"></div>
 			</div>
 			
 		</div>

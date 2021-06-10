@@ -8,9 +8,7 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 public class SysInitListener implements ServletContextListener {
 
@@ -29,6 +27,25 @@ public class SysInitListener implements ServletContextListener {
         for (String key: set) {
             application.setAttribute(key,map.get(key));
         }
+
+
+        Map<String,String> pMap = new HashMap<>();
+        ResourceBundle rb = ResourceBundle.getBundle("stage2Possibility");
+
+        Enumeration<String> e = rb.getKeys();
+
+        while (e.hasMoreElements()){
+
+            //阶段
+            String key = e.nextElement();
+            //可能性
+            String value = rb.getString(key);
+
+            pMap.put(key,value);
+        }
+
+        //将pMap保存到浏览器缓存中
+        application.setAttribute("pMap",pMap);
 
     }
 

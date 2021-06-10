@@ -131,6 +131,15 @@ public class ClueController {
         return list;
     }
 
+    //获取线索列表
+    @RequestMapping(value = "/pageList.do")
+    @ResponseBody
+    public Map<String,Object> pageList(String pageNo,String pageSize){
+        Map<String,Object> map = clueService.pageList(pageNo,pageSize);
+
+        return map;
+    }
+
     //把线索转换成客户和联系人
     @RequestMapping(value = "/convert.do")
     @ResponseBody

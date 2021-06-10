@@ -5,6 +5,11 @@
 
 <mapper namespace="com.zenghao.crm.workbench.dao.CustomerDao">
 
+    <!--根据输入的客户名字模糊查询客户的名字列表-->
+    <select id="getCustomerName" resultType="String">
+        select name from tbl_customer where name like '%' #{name} '%'
+    </select>
+
     <!--根据公司名字（name）精确查找客户-->
     <select id="getCustomerByName" resultType="Customer">
         select * from tbl_customer where name=#{name}

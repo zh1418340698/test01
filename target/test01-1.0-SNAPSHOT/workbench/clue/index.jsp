@@ -18,6 +18,10 @@ request.getServerPort()+request.getContextPath()+"/";
 <script type="text/javascript" src="jquery/bootstrap-datetimepicker-master/js/bootstrap-datetimepicker.js"></script>
 <script type="text/javascript" src="jquery/bootstrap-datetimepicker-master/locale/bootstrap-datetimepicker.zh-CN.js"></script>
 
+	<%--分页插件--%>
+	<link rel="stylesheet" type="text/css" href="jquery/bs_pagination/jquery.bs_pagination.min.css">
+	<script type="text/javascript" src="jquery/bs_pagination/jquery.bs_pagination.min.js"></script>
+	<script type="text/javascript" src="jquery/bs_pagination/en.js"></script>
 <script type="text/javascript">
 
 	$(function(){
@@ -57,7 +61,8 @@ request.getServerPort()+request.getContextPath()+"/";
 
 
 		})
-		
+
+		//保存线索
 		$("#saveBtn").click(function () {
 
 			$.ajax({
@@ -89,15 +94,82 @@ request.getServerPort()+request.getContextPath()+"/";
 						//刷新线索列表，pageList
 						//略过，
 						$("#createClueModal").modal("hide");
-
+						pageList(1,2);
 					}else {
 						alert("创建线索失败");
 					}
 				}
 			})
 		})
-		
+
+		pageList(1,2);
+
+		//给全选框绑定事件，触发全选
+		$("#qx").click(function () {
+			$("input[name=xz]").prop("checked",this.checked);
+		})
+
+		//给复选框绑定事件，取消全选或选中全选
+		$("#showClueBody").on("click",$("input[name=xz]"),function () {
+			$("#qx").prop("checked",$("input[name=xz]").length==$("input[name=xz]:checked").length);
+		})
 	});
+
+	//显示所有的线索
+	function pageList(pageNo,pageSize) {
+
+		$.ajax({
+			url:"workbench/clue/pageList.do",
+			data: {
+				"pageNo":pageNo,
+				"pageSize":pageSize
+			},
+			type:"get",
+			dataType:"json",
+			success: function (data) {
+
+				var html = "";
+
+				$.each(data.clueList,function (i,n) {
+					html += '<tr>';
+					html += '<td><input name="xz" value="'+n.id+'" type="checkbox" /></td>';
+					html += '<td><a style="text-decoration: none; cursor: pointer;" onclick="window.location.href=\'workbench/clue/detail.do?id='+n.id+'\';">'+n.fullname+n.appellation+'</a></td>';
+					html += '<td>'+n.company+'</td>';
+					html += '<td>'+n.phone+'</td>';
+					html += '<td>'+n.mphone+'</td>';
+					html += '<td>'+n.source+'</td>';
+					html += '<td>'+n.owner+'</td>';
+					html += '<td>'+n.state+'</td>';
+					html += '</tr>';
+				})
+
+				$("#showClueBody").html(html);
+
+				var totalPages = data.total%pageSize==0?data.total/pageSize:parseInt(data.total/pageSize)+1;
+
+				//数据处理完毕后，结合分页查询，对前端展现分页信息
+				$("#cluePage").bs_pagination({
+					currentPage: pageNo, // 页码
+					rowsPerPage: pageSize, // 每页显示的记录条数
+					maxRowsPerPage: 20, // 每页最多显示的记录条数
+					totalPages: totalPages, // 总页数
+					totalRows: data.total, // 总记录条数
+
+					visiblePageLinks: 3, // 显示几个卡片
+
+					showGoToPage: true,
+					showRowsPerPage: true,
+					showRowsInfo: true,
+					showRowsDefaultInfo: true,
+
+					//在点击分页组件时触发该函数
+					onChangePage : function(event, data){
+						pageList(data.currentPage , data.rowsPerPage);
+					}
+				});
+			}
+		})
+	}
 	
 </script>
 </head>
@@ -512,7 +584,7 @@ request.getServerPort()+request.getContextPath()+"/";
 				<table class="table table-hover">
 					<thead>
 						<tr style="color: #B3B3B3;">
-							<td><input type="checkbox" /></td>
+							<td><input id="qx" type="checkbox" /></td>
 							<td>名称</td>
 							<td>公司</td>
 							<td>公司座机</td>
@@ -522,8 +594,8 @@ request.getServerPort()+request.getContextPath()+"/";
 							<td>线索状态</td>
 						</tr>
 					</thead>
-					<tbody>
-						<tr>
+					<tbody id="showClueBody">
+						<%--<tr>
 							<td><input type="checkbox" /></td>
 							<td><a style="text-decoration: none; cursor: pointer;" onclick="window.location.href='workbench/clue/detail.do?id=1f98464959744847984f57a277f43135';">李彦宏先生</a></td>
 							<td>动力节点</td>
@@ -532,8 +604,8 @@ request.getServerPort()+request.getContextPath()+"/";
 							<td>广告</td>
 							<td>zhangsan</td>
 							<td>已联系</td>
-						</tr>
-                        <tr class="active">
+						</tr>--%>
+                        <%--<tr class="active">
                             <td><input type="checkbox" /></td>
                             <td><a style="text-decoration: none; cursor: pointer;" onclick="window.location.href='workbench/clue/detail.do?id=45ae8f2d52bc497ea9862657568e3ea0';">马化腾先生</a></td>
                             <td>动力节点</td>
@@ -542,44 +614,13 @@ request.getServerPort()+request.getContextPath()+"/";
                             <td>广告</td>
                             <td>zhangsan</td>
                             <td>已联系</td>
-                        </tr>
+                        </tr>--%>
 					</tbody>
 				</table>
 			</div>
 			
 			<div style="height: 50px; position: relative;top: 60px;">
-				<div>
-					<button type="button" class="btn btn-default" style="cursor: default;">共<b>50</b>条记录</button>
-				</div>
-				<div class="btn-group" style="position: relative;top: -34px; left: 110px;">
-					<button type="button" class="btn btn-default" style="cursor: default;">显示</button>
-					<div class="btn-group">
-						<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-							10
-							<span class="caret"></span>
-						</button>
-						<ul class="dropdown-menu" role="menu">
-							<li><a href="#">20</a></li>
-							<li><a href="#">30</a></li>
-						</ul>
-					</div>
-					<button type="button" class="btn btn-default" style="cursor: default;">条/页</button>
-				</div>
-				<div style="position: relative;top: -88px; left: 285px;">
-					<nav>
-						<ul class="pagination">
-							<li class="disabled"><a href="#">首页</a></li>
-							<li class="disabled"><a href="#">上一页</a></li>
-							<li class="active"><a href="#">1</a></li>
-							<li><a href="#">2</a></li>
-							<li><a href="#">3</a></li>
-							<li><a href="#">4</a></li>
-							<li><a href="#">5</a></li>
-							<li><a href="#">下一页</a></li>
-							<li class="disabled"><a href="#">末页</a></li>
-						</ul>
-					</nav>
-				</div>
+				<div id="cluePage"></div>
 			</div>
 			
 		</div>

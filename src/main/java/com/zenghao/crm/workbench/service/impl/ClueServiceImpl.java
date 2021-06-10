@@ -9,7 +9,9 @@ import com.zenghao.crm.workbench.service.ClueService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class ClueServiceImpl implements ClueService {
@@ -270,6 +272,18 @@ public class ClueServiceImpl implements ClueService {
 
 
         return flag;
+    }
+
+    @Override
+    public Map<String, Object> pageList(String pageNo, String pageSize) {
+        Map<String,Object> map = new HashMap<>();
+        int total = clueDao.getCount();
+        List<Clue> clueList = clueDao.getClueList();
+
+        map.put("total",total);
+        map.put("clueList",clueList);
+
+        return map;
     }
 
 

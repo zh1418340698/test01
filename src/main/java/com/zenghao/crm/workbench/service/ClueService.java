@@ -7,6 +7,7 @@ import com.zenghao.crm.workbench.domain.ClueActivityRelation;
 import com.zenghao.crm.workbench.domain.Tran;
 
 import java.util.List;
+import java.util.Map;
 
 public interface ClueService {
 
@@ -19,4 +20,6 @@ public interface ClueService {
     Boolean bund(String cid,String[] aids);
 
     Boolean convert(String clueId, Tran tran, String createBy);
+
+    Map<String, Object> pageList(String pageNo, String pageSize);
 }
