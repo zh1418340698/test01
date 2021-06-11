@@ -64,6 +64,18 @@ public class ClueController {
         return map;
     }
 
+    //删除线索
+    @RequestMapping(value = "/delete2.do")
+    @ResponseBody
+    public Map<String,Object> delete2(String[] id){
+        Map<String,Object> map = new HashMap<>();
+
+        boolean flag = clueService.delete2(id);
+        map.put("success",flag);
+
+        return map;
+    }
+
     //展现线索详细信息页
     @RequestMapping(value = "/detail.do")
     @ResponseBody
@@ -134,8 +146,10 @@ public class ClueController {
     //获取线索列表
     @RequestMapping(value = "/pageList.do")
     @ResponseBody
-    public Map<String,Object> pageList(String pageNo,String pageSize){
-        Map<String,Object> map = clueService.pageList(pageNo,pageSize);
+    public Map<String,Object> pageList(Integer pageNo,Integer pageSize){
+        int skipCount = (pageNo-1) * pageSize;
+
+        Map<String,Object> map = clueService.pageList(skipCount,pageSize);
 
         return map;
     }

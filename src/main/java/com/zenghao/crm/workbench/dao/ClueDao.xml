@@ -37,10 +37,17 @@
      join tbl_user u
      on u.id=c.owner
      order by createTime desc
+     limit #{skipCount},#{pageSize}
     </select>
 
     <delete id="delete">
         delete from tbl_clue where id=#{id}
+    </delete>
+    <delete id="delete2">
+        delete from tbl_clue where id in
+        <foreach collection="array" item="id" open="(" close=")" separator=",">
+            #{id}
+        </foreach>
     </delete>
 
     <!--保存创建的线索-->

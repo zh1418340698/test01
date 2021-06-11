@@ -275,15 +275,27 @@ public class ClueServiceImpl implements ClueService {
     }
 
     @Override
-    public Map<String, Object> pageList(String pageNo, String pageSize) {
+    public Map<String, Object> pageList(Integer skipCount, Integer pageSize) {
         Map<String,Object> map = new HashMap<>();
         int total = clueDao.getCount();
-        List<Clue> clueList = clueDao.getClueList();
+        List<Clue> clueList = clueDao.getClueList(skipCount,pageSize);
 
         map.put("total",total);
         map.put("clueList",clueList);
 
         return map;
+    }
+
+    @Override
+    public boolean delete2(String[] id) {
+        boolean flag = true;
+
+        int count = clueDao.delete2(id);
+        if ( count != id.length){
+            flag = false;
+        }
+
+        return flag;
     }
 
 

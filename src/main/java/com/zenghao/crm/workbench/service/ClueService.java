@@ -21,5 +21,7 @@ public interface ClueService {
 
     Boolean convert(String clueId, Tran tran, String createBy);
 
-    Map<String, Object> pageList(String pageNo, String pageSize);
+    Map<String, Object> pageList(Integer skipCount, Integer pageSize);
+
+    boolean delete2(String[] id);
 }

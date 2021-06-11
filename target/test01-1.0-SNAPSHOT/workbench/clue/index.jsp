@@ -93,10 +93,59 @@ request.getServerPort()+request.getContextPath()+"/";
 
 						//刷新线索列表，pageList
 						//略过，
+
 						$("#createClueModal").modal("hide");
-						pageList(1,2);
+						pageList(1,$("#cluePage").bs_pagination('getOption', 'rowsPerPage'));
 					}else {
 						alert("创建线索失败");
+					}
+				}
+			})
+		})
+
+		//删除线索
+		$("#delete").click(function () {
+            var $xz = $("input[name=xz]:checked");
+
+            if( $xz.length == 0){
+
+                alert("请选择要删除的活动")
+
+            }else {
+
+                //给用户提示，问他是否删除
+                if (confirm("确定删除所选中的记录吗？")) {
+
+                    //workbench/delete.do?id=xxx&xxx...
+                    //拼接参数
+                    var param = "";
+
+                    for (var i = 0; i < $xz.length; i++) {
+
+                        param += "id=" + $($xz[i]).val();
+
+                        //如果不是最后一个id的话，加上&符号
+                        if (i < $xz.length - 1) {
+                            param += "&";
+                        }
+
+                    }
+                }
+            }
+
+			$.ajax({
+				url:"workbench/clue/delete2.do",
+				data:param,
+				type:"get",
+				dataType:"json",
+				success:function (data) {
+
+					if (data.success){
+
+						pageList(1,$("#cluePage").bs_pagination('getOption', 'rowsPerPage'))
+
+					}else {
+						alert("删除线索失败");
 					}
 				}
 			})
@@ -575,7 +624,7 @@ request.getServerPort()+request.getContextPath()+"/";
 				<div class="btn-group" style="position: relative; top: 18%;">
 				  <button type="button" class="btn btn-primary" id="addBtn"><span class="glyphicon glyphicon-plus"></span> 创建</button>
 				  <button type="button" class="btn btn-default" data-toggle="modal" data-target="#editClueModal"><span class="glyphicon glyphicon-pencil"></span> 修改</button>
-				  <button type="button" class="btn btn-danger"><span class="glyphicon glyphicon-minus"></span> 删除</button>
+				  <button type="button" class="btn btn-danger" id="delete"><span class="glyphicon glyphicon-minus"></span> 删除</button>
 				</div>
 				
 				
