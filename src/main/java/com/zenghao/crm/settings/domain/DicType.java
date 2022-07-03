@@ -29,4 +29,8 @@ public class DicType {
     public void setDescription(String description) {
         this.description = description;
     }
+
+    public void a(){
+        System.out.println(123);
+    }
 }
